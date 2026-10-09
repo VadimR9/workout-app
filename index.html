@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0d12">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Мой прогресс">
+  <meta name="description" content="Персональный офлайн-дневник тренировок">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <title>Мой прогресс</title>
+  <style>
+    .boot-screen{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:#0b0d12;transition:opacity .28s ease,visibility .28s ease}
+    .boot-screen.ready{opacity:0;visibility:hidden;pointer-events:none}
+    .boot-emblem{position:relative;width:140px;height:140px;display:grid;place-items:center}
+    .boot-orbit{position:absolute;inset:0;border:1px solid #c8ff4720;border-radius:50%}
+    .boot-orbit:after{content:"";position:absolute;inset:-1px;border:2px solid transparent;border-top-color:#c8ff47;border-right-color:#c8ff4755;border-radius:50%;animation:bootSpin 1.8s linear infinite}
+    .boot-orbit.inner{inset:16px;transform:rotate(120deg)}
+    .boot-orbit.inner:after{animation-direction:reverse;animation-duration:2.8s;border-top-color:#c8ff4766}
+    .boot-emblem svg{width:56px;height:56px;color:#c8ff47;animation:bootPulse 1.8s ease-in-out infinite}
+    @keyframes bootSpin{to{transform:rotate(360deg)}}
+    @keyframes bootPulse{50%{transform:scale(.9);opacity:.65}}
+    @media(prefers-reduced-motion:reduce){.boot-emblem svg,.boot-orbit:after{animation:none}.boot-screen{transition:none}}
+  </style>
+</head>
+<body>
+  <div class="boot-screen" id="bootScreen" role="status" aria-label="Загрузка приложения"><div class="boot-emblem" aria-hidden="true"><i class="boot-orbit"></i><i class="boot-orbit inner"></i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12h10M4 8v8m3-10v12m10-12v12m3-10v8"/></svg></div></div>
+  <div id="app">
+    <header class="topbar">
+      <div class="topbar-leading">
+        <button class="back-button hidden" id="backButton" aria-label="Назад">‹</button>
+        <div>
+          <p class="eyebrow" id="screenEyebrow">ТРЕНИРОВОЧНЫЙ ДНЕВНИК</p>
+          <h1 id="screenTitle">Мой прогресс</h1>
+        </div>
+      </div>
+      <button class="icon-button" id="moreButton" aria-label="Настройки">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      </button>
+    </header>
+
+    <main id="mainContent" aria-live="polite"></main>
+
+    <nav class="bottom-nav" aria-label="Основная навигация">
+      <button class="nav-item active" data-screen="home">
+        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7M5 9v11h5v-6h4v6h5V9"/></svg><span>Главная</span>
+      </button>
+      <button class="nav-item" data-screen="history">
+        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>История</span>
+      </button>
+      <button class="nav-item nav-main" data-screen="start">
+        <span class="nav-plus"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><span>Записать</span>
+      </button>
+      <button class="nav-item" data-screen="progress">
+        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4v16h16M7 15l5-5 4 2 5-7"/></svg><span>Прогресс</span>
+      </button>
+      <button class="nav-item" data-screen="exercises">
+        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12h10M4 8v8m3-10v12m10-12v12m3-10v8"/></svg><span>Упражнения</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="modal-backdrop hidden" id="modalBackdrop">
+    <section class="modal-sheet" id="modalSheet" role="dialog" aria-modal="true"></section>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <input type="file" id="importInput" accept="application/json" hidden>
+  <script src="workout-data.js" defer></script>
+  <script src="exercise-media.js" defer></script>
+  <script src="workspace.js" defer></script>
+  <script src="trainer-ui.js" defer></script>
+  <script src="app.js" defer></script>
+</body>
+</html>
